@@ -45,7 +45,7 @@ if page == "Daily Tracker":
     with tab1:
         # Input Form
         with st.expander("Add New Item", expanded=False):
-            with st.form("new_task"):
+            with st.form("new_task", clear_on_submit=True):
                 col1, col2, col3, col4 = st.columns([3, 2, 2, 2])
                 with col1:
                     task_title = st.text_input("Title")
@@ -64,7 +64,6 @@ if page == "Daily Tracker":
                 if submitted and task_title:
                     db.add_task(task_title, category, due_date, item_type, item_time)
                     st.success(f"{item_type} added!")
-                    st.rerun()
 
         # Date Range Filter
         st.subheader("Your Items")
@@ -139,7 +138,7 @@ if page == "Daily Tracker":
                             icon = "📌" if row['item_type'] == 'Appointment' else "📝"
                             time_str = f" at {row['item_time']}" if row['item_time'] and row['item_time'] != 'None' else ""
                             
-                            col_check, col_text = st.columns([1, 4])
+                            col_check, col_text, col_del = st.columns([1, 4, 1])
                             with col_check:
                                 is_checked = st.checkbox("", value=row['status'] == 'Completed', key=f"check_{row['id']}")
                                 if is_checked and row['status'] != 'Completed':
@@ -155,6 +154,10 @@ if page == "Daily Tracker":
                                 else:
                                     st.markdown(content)
                                 st.caption(f"{row['due_date']}")
+                            with col_del:
+                                if st.button("🗑️", key=f"del_{row['id']}", help="Delete Item"):
+                                    db.delete_task(row['id'])
+                                    st.rerun()
         else:
             st.info("No items found.")
 
