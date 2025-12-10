@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+.env
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Database (Optional: Keep this commented if you want to push your initial seed data, but usually DBs are ignored)
+# tasks.db
